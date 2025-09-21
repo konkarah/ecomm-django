@@ -1,0 +1,55 @@
+"""
+<!DOCTYPE html>
+<html>
+<head>
+    <title>New Order Notification</title>
+</head>
+<body>
+    <h2>New Order Received: {{ order.order_number }}</h2>
+    
+    <h3>Customer Details:</h3>
+    <p>
+        <strong>Name:</strong> {{ customer.first_name }} {{ customer.last_name }}<br>
+        <strong>Email:</strong> {{ customer.email }}<br>
+        <strong>Phone:</strong> {{ customer.phone_number }}<br>
+        <strong>Username:</strong> {{ customer.username }}
+    </p>
+    
+    <h3>Order Details:</h3>
+    <p>
+        <strong>Order Number:</strong> {{ order.order_number }}<br>
+        <strong>Status:</strong> {{ order.get_status_display }}<br>
+        <strong>Total Amount:</strong> KES {{ order.total_amount }}<br>
+        <strong>Date:</strong> {{ order.created_at|date:"F d, Y H:i" }}
+    </p>
+    
+    {% if order.notes %}
+    <p><strong>Notes:</strong> {{ order.notes }}</p>
+    {% endif %}
+    
+    <h3>Order Items:</h3>
+    <table border="1" cellpadding="5" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>{{ item.product.name }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>KES {{ item.unit_price }}</td>
+                <td>KES {{ item.subtotal }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <p><strong>Total: KES {{ order.total_amount }}</strong></p>
+</body>
+</html>
+"""

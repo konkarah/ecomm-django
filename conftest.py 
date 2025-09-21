@@ -1,0 +1,69 @@
+import pytest
+from django.test import TestCase
+from rest_framework.test import APIClient
+from django.contrib.auth import get_user_model
+from oauth2_provider.models import Application, AccessToken
+from products.models import Category, Product
+from orders.models import Order, OrderItem
+
+User = get_user_model()
+
+
+@pytest.fixture
+def api_client():
+    return APIClient()
+
+
+@pytest.fixture
+def user():
+    return User.objects.create_user(
+        username='testuser',
+        email='test@example.com',
+        password='testpass123',
+        first_name='Test',
+        last_name='User',
+        phone_number='+254712345678'
+    )
+
+
+@pytest.fixture
+def oauth_app():
+    return Application.objects.create(
+        name="Test Application",
+        client_type=Application.CLIENT_PUBLIC,
+        authorization_grant_type=Application.GRANT_AUTHORIZATION_CODE,
+    )
+
+
+@pytest.fixture
+def access_token(user, oauth_app):
+    return AccessToken.objects.create(
+        user=user,
+        application=oauth_app,
+        token='test-access-token',
+        scope='read write'
+    )
+
+
+@pytest.fixture
+def authenticated_client(api_client, access_token):
+    api_client.credentials(HTTP_AUTHORIZATION=f'Bearer {access_token.token}')
+    return api_client
+
+
+@pytest.fixture
+def category():
+    return Category.objects.create(name='Test Category')
+
+
+@pytest.fixture
+def product(category):
+    product = Product.objects.create(
+        name='Test Product',
+        description='Test Description',
+        price=10.99,
+        sku='TEST-001',
+        stock_quantity=100
+    )
+    product.categories.add(category)
+    return product

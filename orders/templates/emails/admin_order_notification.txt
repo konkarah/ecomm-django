@@ -1,0 +1,24 @@
+"""
+New Order Received: {{ order.order_number }}
+
+Customer Details:
+Name: {{ customer.first_name }} {{ customer.last_name }}
+Email: {{ customer.email }}
+Phone: {{ customer.phone_number }}
+Username: {{ customer.username }}
+
+Order Details:
+Order Number: {{ order.order_number }}
+Status: {{ order.get_status_display }}
+Total Amount: KES {{ order.total_amount }}
+Date: {{ order.created_at|date:"F d, Y H:i" }}
+
+{% if order.notes %}Notes: {{ order.notes }}{% endif %}
+
+Order Items:
+{% for item in items %}
+- {{ item.product.name }} x {{ item.quantity }} @ KES {{ item.unit_price }} = KES {{ item.subtotal }}
+{% endfor %}
+
+Total: KES {{ order.total_amount }}
+"""
