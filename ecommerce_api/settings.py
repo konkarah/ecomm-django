@@ -249,7 +249,7 @@ INSTALLED_APPS = [
     
     # Third party apps
     'rest_framework',
-    'django_filters',
+    # 'django_filters',
     'oauth2_provider',
     'corsheaders',
     # 'oauth2_provider.contrib.oidc',
@@ -347,11 +347,11 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.JSONRenderer',
     ],
     # Add filtering and search backends
-    'DEFAULT_FILTER_BACKENDS': [
-        'django_filters.rest_framework.DjangoFilterBackend',
-        'rest_framework.filters.SearchFilter',
-        'rest_framework.filters.OrderingFilter',
-    ],
+    # 'DEFAULT_FILTER_BACKENDS': [
+    #     'django_filters.rest_framework.DjangoFilterBackend',
+    #     'rest_framework.filters.SearchFilter',
+    #     'rest_framework.filters.OrderingFilter',
+    # ],
 }
 
 # OAuth2 Provider Settings (SIMPLIFIED)

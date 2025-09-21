@@ -77,6 +77,7 @@ class OrderViewSet(viewsets.ModelViewSet):
     
     def perform_create(self, serializer):
         order = serializer.save()
+        print(f"Order {order.order_number} created successfully!")
         try:
             send_order_notifications.delay(order.id)
             logger.info(f"Notification task queued for order {order.id}")

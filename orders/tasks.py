@@ -29,8 +29,10 @@ def send_order_notifications(order_id):
 @shared_task
 def send_customer_sms(order_id):
     """Send SMS notification to customer"""
+    print(f"Sending SMS for order {order_id}llllllllllllllll") 
     try:
         order = Order.objects.get(id=order_id)
+        print(f"Settings: {settings.AFRICAS_TALKING_API_KEY}, {settings.AFRICAS_TALKING_USERNAME}, {settings.AFRICAS_TALKING_SENDER_ID}, {order.customer.phone_number}")  
         
         if not order.customer.phone_number or not settings.AFRICAS_TALKING_API_KEY:
             logger.warning(f"Missing phone number or API key for order {order_id}")

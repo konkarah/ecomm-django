@@ -1,3 +1,4 @@
+# Current packages (keep these)
 amqp==5.3.1
 asgiref==3.9.1
 async-timeout==5.0.1
@@ -35,3 +36,17 @@ tzdata==2025.2
 urllib3==2.5.0
 vine==5.1.0
 wcwidth==0.2.13
+
+# New essential packages
+pytest==7.4.3
+pytest-django==4.7.0
+pytest-cov==4.1.0
+factory-boy==3.3.0
+black==23.11.0
+flake8==6.1.0
+isort==5.12.0
+gunicorn==21.2.0
+whitenoise==6.6.0
+django-filter==23.3
+redis==6.4.0
+django-celery-results=3.4.0
