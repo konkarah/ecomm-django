@@ -104,7 +104,7 @@ def jwks(request):
     })
 
 
-# 🔽 Moved outside the class
+
 @protected_resource(scopes=['read'])
 @require_http_methods(["GET"])
 def protected_view(request):

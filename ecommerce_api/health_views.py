@@ -1,38 +1,3 @@
-# from django.http import JsonResponse
-# from django.db import connection
-# import redis
-# from django.conf import settings
-
-# def health_check(request):
-#     """Health check endpoint for Docker/Kubernetes"""
-#     health_status = {
-#         'status': 'healthy',
-#         'database': 'unknown',
-#         'redis': 'unknown'
-#     }
-    
-#     # Check database
-#     try:
-#         with connection.cursor() as cursor:
-#             cursor.execute("SELECT 1")
-#         health_status['database'] = 'healthy'
-#     except Exception:
-#         health_status['database'] = 'unhealthy'
-#         health_status['status'] = 'unhealthy'
-    
-#     # Check Redis
-#     try:
-#         r = redis.from_url(settings.CELERY_BROKER_URL)
-#         r.ping()
-#         health_status['redis'] = 'healthy'
-#     except Exception:
-#         health_status['redis'] = 'unhealthy'
-#         health_status['status'] = 'unhealthy'
-    
-#     status_code = 200 if health_status['status'] == 'healthy' else 503
-#     return JsonResponse(health_status, status=status_code)
-
-# ecommerce_api/celery.py
 import os
 from celery import Celery
 

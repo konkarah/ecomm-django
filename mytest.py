@@ -1,4 +1,3 @@
-# ==================== MODELS FOR EXAMPLES ====================
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Q, F, Count, Avg, Sum, Max, Min, Prefetch
@@ -36,9 +35,6 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     approved = models.BooleanField(default=False)
 
-# ==================== 1. COMPLEX JOINS & AGGREGATIONS ====================
-
-# Problem: Get authors with their post count, average views, and latest post date
 def get_author_statistics():
     """
     SQL equivalent:
@@ -73,9 +69,7 @@ def get_popular_posts_by_category(category_name, min_views=100):
         (Q(author__user__is_active=True) | Q(author__user__is_staff=True))
     ).select_related('author__user').prefetch_related('categories').distinct()
 
-# ==================== 2. SUBQUERIES ====================
 
-# Problem: Get authors who have more posts than the average
 def get_prolific_authors():
     """Using subqueries to compare against averages"""
     from django.db.models import Subquery, OuterRef
@@ -89,7 +83,7 @@ def get_prolific_authors():
         post_count=Count('posts')
     ).filter(post_count__gt=avg_posts)
 
-# Problem: Get posts with their author's total post count
+
 def get_posts_with_author_post_count():
     """Subquery to get related aggregated data"""
     from django.db.models import Subquery, OuterRef
@@ -109,7 +103,7 @@ def get_posts_with_author_post_count():
         )
     )
 
-# Problem: Get latest comment for each post (window functions alternative)
+
 def get_posts_with_latest_comments():
     """Using subqueries for latest related objects"""
     from django.db.models import Subquery, OuterRef
@@ -125,30 +119,30 @@ def get_posts_with_latest_comments():
         latest_comment_date=Subquery(latest_comments.values('created_at')[:1])
     )
 
-# ==================== 3. N+1 PROBLEM SOLUTIONS ====================
 
-# BAD: N+1 Problem
+
+
 def get_posts_bad():
     """This will cause N+1 queries"""
-    posts = Post.objects.all()  # 1 query
+    posts = Post.objects.all()  
     for post in posts:
-        print(post.author.user.username)  # N queries (one per post)
-        print(post.categories.count())     # N more queries
+        print(post.author.user.username)  
+        print(post.categories.count())     
 
-# GOOD: Optimized with select_related and prefetch_related
+
 def get_posts_optimized():
     """Optimized version - only 3 queries total"""
     posts = Post.objects.select_related(
-        'author__user'  # JOIN author and user tables
+        'author__user'  
     ).prefetch_related(
-        'categories'    # Separate optimized query for many-to-many
+        'categories'    
     )
     
     for post in posts:
-        print(post.author.user.username)  # No additional query
-        print(post.categories.count())     # No additional query
+        print(post.author.user.username)  
+        print(post.categories.count())     
 
-# Advanced: Custom Prefetch with filtering
+
 def get_posts_with_approved_comments():
     """Only prefetch approved comments"""
     approved_comments = Prefetch(
@@ -159,7 +153,7 @@ def get_posts_with_approved_comments():
     
     return Post.objects.prefetch_related(approved_comments)
 
-# Complex optimization: Nested prefetching
+
 def get_categories_with_posts_and_authors():
     """Prefetch categories -> posts -> authors in one go"""
     return Category.objects.prefetch_related(
@@ -170,7 +164,7 @@ def get_categories_with_posts_and_authors():
         )
     )
 
-# ==================== 4. CUSTOM MANAGERS & QUERYSETS ====================
+
 
 class PublishedPostQuerySet(models.QuerySet):
     """Custom QuerySet with reusable methods"""
@@ -216,30 +210,28 @@ class PostManager(models.Manager):
         """Get popular posts from recent days"""
         return self.get_queryset().recent(days).popular(min_views)
 
-# Add to Post model:
-# objects = PostManager()
 
-# Usage examples:
+
+
 def example_custom_manager_usage():
-    # Chain custom methods
+   
     popular_posts = Post.objects.published().popular().recent().with_stats()
     
-    # Search with optimization
+    
     search_results = Post.objects.published().search('django').select_related('author')
     
-    # Business logic methods
+    
     trending = Post.objects.popular_recent(days=3, min_views=100)
 
-# ==================== 5. ADVANCED QUERY TECHNIQUES ====================
 
-# F expressions for database-level operations
+
 def increment_view_counts(post_ids):
     """Increment view count at database level"""
     Post.objects.filter(id__in=post_ids).update(
         view_count=F('view_count') + 1
     )
 
-# Conditional aggregations
+
 def get_post_engagement_stats():
     """Complex conditional aggregations"""
     from django.db.models import Case, When, IntegerField
@@ -256,7 +248,7 @@ def get_post_engagement_stats():
         )
     )
 
-# Raw SQL for complex queries
+
 def get_monthly_post_stats():
     """When ORM becomes too complex, use raw SQL"""
     from django.db import connection
@@ -277,16 +269,16 @@ def get_monthly_post_stats():
         cursor.execute(query)
         return cursor.fetchall()
 
-# ==================== 6. QUERY OPTIMIZATION TECHNIQUES ====================
+
 
 def optimized_post_list_view():
     """Production-ready optimized query"""
     return Post.objects.select_related(
-        'author__user'  # Avoid N+1 for author data
+        'author__user'  
     ).prefetch_related(
         Prefetch(
             'categories',
-            queryset=Category.objects.only('name'),  # Only fetch name field
+            queryset=Category.objects.only('name'), 
             to_attr='category_list'
         ),
         Prefetch(
@@ -296,34 +288,34 @@ def optimized_post_list_view():
         )
     ).annotate(
         comment_count=Count('comments', filter=Q(comments__approved=True))
-    ).only(  # Only fetch needed fields
+    ).only(  
         'title', 'created_at', 'view_count', 'author__user__username'
     ).filter(published=True)
 
-# Database query analysis
+
 def analyze_query_performance():
     """How to debug query performance"""
     from django.db import connection
     from django.conf import settings
     
-    # Enable query logging in settings
+
     settings.LOGGING['loggers']['django.db.backends'] = {
         'level': 'DEBUG',
         'handlers': ['console']
     }
     
-    # Reset query log
+
     connection.queries_log.clear()
     
-    # Execute your query
+
     list(Post.objects.published().with_stats())
     
-    # Analyze queries
+
     print(f"Number of queries: {len(connection.queries)}")
     for query in connection.queries:
         print(f"Time: {query['time']}, SQL: {query['sql']}")
 
-# ==================== 7. COMMON ASSESSMENT QUESTIONS ====================
+
 
 """
 1. "Fix this N+1 query problem"

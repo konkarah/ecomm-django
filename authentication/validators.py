@@ -1,19 +1,3 @@
-# from oauth2_provider.oauth2_validators import OAuth2Validator
-
-
-# class CustomOAuth2Validator(OAuth2Validator):
-#     def get_default_scopes(self, client_id, request, *args, **kwargs):
-#         """
-#         Return a list of default scopes for the client
-#         """
-#         return ['read']
-    
-#     def get_default_redirect_uri(self, client_id, request, *args, **kwargs):
-#         """
-#         Return the default redirect URI for the client
-#         """
-#         return 'http://localhost:3000/callback'
-
 from oauth2_provider.oauth2_validators import OAuth2Validator
 from django.contrib.auth import authenticate
 

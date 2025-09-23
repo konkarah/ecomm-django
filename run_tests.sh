@@ -1,5 +1,4 @@
-# Run tests script
-# run_tests.sh
+
 """
 #!/bin/bash
 
@@ -27,7 +26,7 @@ coverage report --show-missing
 """
 
 
-# Makefile for test commands
+
 """
 # Makefile
 

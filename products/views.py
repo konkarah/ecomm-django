@@ -10,45 +10,6 @@ from .serializers import CategorySerializer, ProductSerializer, ProductCreateSer
 from common.pagination import StandardResultsSetPagination, LargeResultsSetPagination, SmallResultsSetPagination
 
 
-# class CategoryViewSet(viewsets.ModelViewSet):
-#     queryset = Category.objects.all()
-#     serializer_class = CategorySerializer
-#     permission_classes = [IsAuthenticatedOrReadOnly]
-    
-#     @action(detail=True, methods=['get'])
-#     def products(self, request, pk=None):
-#         """Get all products in this category and its subcategories"""
-#         category = self.get_object()
-#         all_categories = [category] + category.get_all_children()
-#         products = Product.objects.filter(categories__in=all_categories, is_active=True).distinct()
-#         serializer = ProductSerializer(products, many=True)
-#         return Response(serializer.data)
-
-
-# class ProductViewSet(viewsets.ModelViewSet):
-#     queryset = Product.objects.filter(is_active=True)
-#     permission_classes = [IsAuthenticatedOrReadOnly]
-    
-#     def get_serializer_class(self):
-#         if self.action == 'create':
-#             return ProductCreateSerializer
-#         return ProductSerializer
-    
-#     @action(detail=False, methods=['post'])
-#     def bulk_upload(self, request):
-#         """Bulk upload products"""
-#         if not isinstance(request.data, list):
-#             return Response(
-#                 {'error': 'Expected a list of products'}, 
-#                 status=status.HTTP_400_BAD_REQUEST
-#             )
-        
-#         serializer = ProductCreateSerializer(data=request.data, many=True)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer

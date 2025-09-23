@@ -19,9 +19,6 @@ from django.urls import path, include
 from authentication.views import openid_configuration, jwks
 from django.contrib.auth import views as auth_views
 
-# urlpatterns = [
-#     path('admin/', admin.site.urls),
-# ]
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
@@ -33,5 +30,5 @@ urlpatterns = [
     path('api/products/', include('products.urls')),
     path('api/orders/', include('orders.urls')),
     path('api/customers/', include('customers.urls')),
-    # path('api/health/', include('health_check.urls')),  # For health checks
+    path('api/health/', include('health_check.urls')),  # For health checks
 ]

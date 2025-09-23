@@ -10,10 +10,3 @@ urlpatterns = [
 
 ]
 
-# from django.urls import path
-# from . import views
-
-# urlpatterns += [
-#     path('protected/', views.protected_view, name='protected'),
-#     path('create/', views.create_resource, name='create_resource'),
-# ]
