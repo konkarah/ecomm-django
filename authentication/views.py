@@ -1,3 +1,4 @@
+from django.conf import settings
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -98,7 +99,7 @@ def jwks(request):
     # Load your private RSA key from settings
     private_key_pem = settings.OAUTH2_PROVIDER['OIDC_RSA_PRIVATE_KEY']
     
-    key = jwk.JWK.from_pem(private_key_pem.encode())
+    key = jwks.JWK.from_pem(private_key_pem.encode())
     return JsonResponse({
         "keys": [json.loads(key.export(private_keys=False))]
     })
