@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: sqlite-pv
+  namespace: ecommerce-api
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: standard
+  hostPath:
+    path: /tmp/ecommerce-sqlite
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sqlite-pvc
+  namespace: ecommerce-api
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: standard
+
+---

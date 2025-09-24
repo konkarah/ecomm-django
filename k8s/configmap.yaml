@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ecommerce-config
+  namespace: ecommerce-api
+data:
+  DJANGO_SETTINGS_MODULE: "ecommerce_api.settings"
+  DEBUG: "False"
+  REDIS_URL: "redis://redis-service:6379/0"
+  EMAIL_BACKEND: "django.core.mail.backends.console.EmailBackend"
+  AFRICAS_TALKING_USERNAME: "sandbox"
+  DEFAULT_FROM_EMAIL: "noreply@ecommerce-api.com"
+  ADMIN_EMAIL: "admin@ecommerce-api.com"
+  CELERY_TIMEZONE: "Africa/Nairobi"

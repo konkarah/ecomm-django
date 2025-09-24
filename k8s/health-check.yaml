@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: health-check-service
+  namespace: ecommerce-api
+spec:
+  selector:
+    app: django-app
+  ports:
+  - name: health
+    port: 8000
+    targetPort: 8000
+  type: ClusterIP

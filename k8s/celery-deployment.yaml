@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: celery-worker
+  namespace: ecommerce-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: celery-worker
+  template:
+    metadata:
+      labels:
+        app: celery-worker
+    spec:
+      containers:
+      - name: celery-worker
+        image: your-docker-repo/ecommerce-api:latest  # Same image
+        command: ["celery", "-A", "ecommerce_api", "worker", "-l", "info"]
+        envFrom:
+        - configMapRef:
+            name: ecommerce-config
+        - secretRef:
+            name: ecommerce-secret
+        volumeMounts:
+        - name: sqlite-storage
+          mountPath: /app/data
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "300m"
+      volumes:
+      - name: sqlite-storage
+        persistentVolumeClaim:
+          claimName: sqlite-pvc
+
+---
