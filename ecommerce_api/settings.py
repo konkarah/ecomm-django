@@ -129,18 +129,6 @@ REST_FRAMEWORK = {
     # ],
 }
 
-# OAuth2 Provider Settings (SIMPLIFIED)
-OAUTH2_PROVIDER = {
-    'SCOPES': {
-        'read': 'Read scope',
-        'write': 'Write scope',
-        'openid': 'OpenID Connect scope',
-    },
-    'ACCESS_TOKEN_EXPIRE_SECONDS': 3600,
-    'REFRESH_TOKEN_EXPIRE_SECONDS': 3600 * 24 * 7,
-}
-
-
 # Allow all CORS settings
 CORS_ORIGIN_ALLOW_ALL = True
 

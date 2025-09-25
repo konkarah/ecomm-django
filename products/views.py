@@ -3,7 +3,7 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated
 from django.db.models import Avg
 from .models import Category, Product
 from .serializers import CategorySerializer, ProductSerializer, ProductCreateSerializer
@@ -13,8 +13,8 @@ from common.pagination import StandardResultsSetPagination, LargeResultsSetPagin
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
-    pagination_class = SmallResultsSetPagination  # Categories don't need large pagination
+    permission_classes = [IsAuthenticated]  # Changed from IsAuthenticatedOrReadOnly
+    pagination_class = SmallResultsSetPagination
     
     @action(detail=True, methods=['get'])
     def products(self, request, pk=None):
@@ -35,8 +35,8 @@ class CategoryViewSet(viewsets.ModelViewSet):
 
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.filter(is_active=True)
-    permission_classes = [IsAuthenticatedOrReadOnly]
-    pagination_class = LargeResultsSetPagination  # Products can have many items
+    permission_classes = [IsAuthenticated]  # Changed from IsAuthenticatedOrReadOnly
+    pagination_class = LargeResultsSetPagination
     
     def get_serializer_class(self):
         if self.action == 'create':
@@ -60,7 +60,7 @@ class ProductViewSet(viewsets.ModelViewSet):
 
 
 class CategoryAveragePriceView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]  # Already authenticated
     
     def get(self, request, category_id):
         """Get average product price for a given category"""
